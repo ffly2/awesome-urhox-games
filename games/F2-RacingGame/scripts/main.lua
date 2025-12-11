@@ -1094,7 +1094,7 @@ function CreateTrackFromPoints(points, width, options)
         local dirZ = next.z - prev.z
         local horizontalLength = math.sqrt(dirX * dirX + dirZ * dirZ)
         
-        if horizontalLength > 0.001 then
+        if horizontalLength > 0. then
             -- 归一化水平方向
             local normX = dirX / horizontalLength
             local normZ = dirZ / horizontalLength

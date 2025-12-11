@@ -1,14 +1,14 @@
 {
-	"name": "RacingGame001",
-	"name_zh": "赛车游戏001",
+	"name": "RacingGame",
+	"name_zh": "赛车游戏",
 	"version": "1.0.0",
 	"author": {
 	  "name": "F2",
 	  "github": "ffly2",
 	  "email": "ffwzpcctv@gmail.com"
 	},
-	"description": "RacingGame001",
-	"description_zh": "赛车游戏001",
+	"description": "RacingGame",
+	"description_zh": "赛车游戏",
 	"category": "racing",
 	"tags": ["3d", "car", "racing", "urhox"],
 	"engine": {
