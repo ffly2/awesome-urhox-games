@@ -388,8 +388,8 @@ local SkillTree = {
 
 -- 玩家技能点数据（存档用）
 local PlayerSkills = {
-    skillPoints = 1000,         -- 可用技能点（初始给一些用于测试）
-    totalPointsEarned = 1000,   -- 累计获得的技能点
+    skillPoints = 500,         -- 游戏初始有500技能点
+    totalPointsEarned = 500,   -- 累计获得的技能点
     unlockedSkills = {},       -- 已解锁的技能 {skillId = currentLevel}
 }
 
@@ -464,26 +464,37 @@ local function UpgradeSkill(lineId, skillId)
     return true, nil
 end
 
--- 获取技能效果（用于游戏中应用）
-local function GetSkillEffect(effectType)
-    local totalValue = 0
+-- 当局游戏技能效果缓存（进入关卡时计算一次）
+local skillEffectsCache_ = {}
+
+-- 初始化当局技能效果缓存（在进入关卡时调用）
+local function InitSkillEffects()
+    skillEffectsCache_ = {}
     
     for lineId, line in pairs(SkillTree) do
         for skillId, skill in pairs(line.skills) do
             local level = GetSkillLevel(skillId)
             if level > 0 then
                 local effect = skill.effects[level]
-                if effect and effect.type == effectType then
-                    totalValue = totalValue + effect.value
+                if effect and effect.type then
+                    skillEffectsCache_[effect.type] = (skillEffectsCache_[effect.type] or 0) + effect.value
                 end
-                if effect and effect.type2 == effectType then
-                    totalValue = totalValue + effect.value2
+                if effect and effect.type2 then
+                    skillEffectsCache_[effect.type2] = (skillEffectsCache_[effect.type2] or 0) + effect.value2
                 end
             end
         end
     end
     
-    return totalValue
+    print("技能效果缓存已初始化:")
+    for effectType, value in pairs(skillEffectsCache_) do
+        print(string.format("  %s: %.2f", effectType, value))
+    end
+end
+
+-- 获取技能效果（从缓存读取）
+local function GetSkillEffect(effectType)
+    return skillEffectsCache_[effectType] or 0
 end
 
 -- 游戏状态
@@ -873,6 +884,10 @@ function Start()
     print("点击选择关卡开始游戏")
 end
 
+function Update(timeStep)
+    
+end
+
 function Stop()
     if nvg_ ~= nil then
         nvgDelete(nvg_)
@@ -925,6 +940,9 @@ end
 -- ============================================================================
 
 function ResetGame()
+    -- 初始化当局技能效果缓存
+    InitSkillEffects()
+    
     enemies_ = {}
     towers_ = {}
     projectiles_ = {}
@@ -4371,3 +4389,5 @@ function DrawEndScreen(width, height, isVictory)
     nvgFillColor(nvg_, nvgRGBA(255, 255, 255, 255))
     nvgText(nvg_, bx + buttonWidth / 2, by + buttonHeight / 2, "返回菜单", nil)
 end
+
+

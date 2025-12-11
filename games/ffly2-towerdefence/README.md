@@ -1,4 +1,4 @@
-# 🎮 游戏名称
+# 🎮 多边形塔防
 
 ![游戏截图](preview/screenshot1.png)
 
